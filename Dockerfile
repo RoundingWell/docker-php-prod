@@ -4,7 +4,7 @@ MAINTAINER woody.gilk@roundingwell.com
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-COPY conf/timezone.ini "$PHP_INI_DIR/conf.d/intl.ini"
+COPY conf/intl.ini "$PHP_INI_DIR/conf.d/intl.ini"
 COPY conf/timezone.ini "$PHP_INI_DIR/conf.d/timezone.ini"
 
 RUN apt-get update && apt-get install -y \
