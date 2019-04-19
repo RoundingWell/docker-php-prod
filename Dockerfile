@@ -8,11 +8,11 @@ COPY conf/timezone.ini "$PHP_INI_DIR/conf.d/intl.ini"
 COPY conf/timezone.ini "$PHP_INI_DIR/conf.d/timezone.ini"
 
 RUN apt-get update && apt-get install -y \
-        libcurl4-openssl-dev \
-        libicu-dev \
-        libpq-dev \
-        zlib1g-dev \
-    && docker-php-ext-install -j$(nproc) bcmath \
+    libicu-dev \
+    libpq-dev \
+    zlib1g-dev
+
+RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) pgsql \
     && docker-php-ext-install -j$(nproc) pdo_pgsql
