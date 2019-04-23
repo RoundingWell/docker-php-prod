@@ -8,5 +8,5 @@ Docker container for PHP-FPM.
 
 ```bash
 docker build .
-docker run docker run --rm -v $(pwd):/var/www/html $(docker images -q | head -1)
+docker run --rm -v $(pwd):/var/www/html $(docker images -q | head -1)
 ```
