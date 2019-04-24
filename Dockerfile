@@ -2,17 +2,24 @@ FROM php:7.3-fpm-alpine
 
 MAINTAINER devops@roundingwell.com
 
-# Add system packages to build extensions
+# Add required system packages
 RUN apk --no-cache --update add \
-    icu-dev \
-    postgresql-dev
+    gzip \
+    icu \
+    libpq \
+    libxml2 \
+    tar \
+    zip
 
 # Add required PHP extensions
-RUN docker-php-ext-install -j$(nproc) bcmath \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+        icu-dev \
+        postgresql-dev \
+    && docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) opcache \
-    && docker-php-ext-install -j$(nproc) pgsql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql
+    && docker-php-ext-install -j$(nproc) pdo_pgsql \
+    && apk del .build-deps
 
 # Use default production config
 # The PHP_INI_DIR variable is defined by the base image.
