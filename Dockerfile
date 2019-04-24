@@ -27,6 +27,8 @@ RUN apk --update --no-cache add \
 COPY php.ini /etc/php7/conf.d/10-production.ini
 COPY php-fpm.conf /etc/php7/php-fpm.conf
 
+WORKDIR /var/www/html
+
 EXPOSE 9000
 
 CMD ["php-fpm7", "-F"]
