@@ -31,6 +31,4 @@ WORKDIR /var/www/html
 
 EXPOSE 9000
 
-USER nobody:nobody
-
 CMD ["php-fpm7", "-F"]
