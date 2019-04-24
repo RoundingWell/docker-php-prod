@@ -1,34 +1,23 @@
-FROM alpine:3.9
+FROM php:7.3-fpm-alpine
 
 MAINTAINER devops@roundingwell.com
 
-RUN apk --update --no-cache add \
-    php7 \
-    php7-bcmath \
-    php7-ctype \
-    php7-curl \
-    php7-dom \
-    php7-fpm \
-    php7-intl \
-    php7-iconv \
-    php7-intl \
-    php7-json \
-    php7-mbstring \
-    php7-opcache \
-    php7-openssl \
-    php7-pdo \
-    php7-pdo_pgsql \
-    php7-phar \
-    php7-posix \
-    php7-sodium \
-    php7-xml \
-    php7-zip
+# Add system packages to build extensions
+RUN apk --no-cache --update add \
+    icu-dev \
+    postgresql-dev
 
-COPY php.ini /etc/php7/conf.d/10-production.ini
-COPY php-fpm.conf /etc/php7/php-fpm.conf
+# Add required PHP extensions
+RUN docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install -j$(nproc) intl \
+    && docker-php-ext-install -j$(nproc) opcache \
+    && docker-php-ext-install -j$(nproc) pgsql \
+    && docker-php-ext-install -j$(nproc) pdo_pgsql
 
-WORKDIR /var/www/html
+# Use default production config
+# The PHP_INI_DIR variable is defined by the base image.
+# https://github.com/php/php-src/blob/master/php.ini-production
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-EXPOSE 9000
-
-CMD ["php-fpm7", "-F"]
+# Add additional settings
+COPY php.ini "$PHP_INI_DIR/conf.d/10-settings.ini"
