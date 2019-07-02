@@ -14,8 +14,10 @@ RUN apk --no-cache --update add \
 # Add required PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         icu-dev \
+        gmp-dev \
         postgresql-dev \
     && docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install -j$(nproc) gmp \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) opcache \
     && docker-php-ext-install -j$(nproc) pdo_pgsql \
